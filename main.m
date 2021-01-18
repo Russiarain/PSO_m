@@ -51,6 +51,10 @@ for r = 1:maxRepeat
         v = w*v + c1*rand(n,m).*(pbest-x) + c2*rand(n,m).*(gbest-x);
 
         % handle velocity boundary violations
+        % Note: this will add about 390 ms to each run
+        % (about 560ms without velocity boundary check)
+        % and reduce converging to local minimum by 100% (there'll be 17 out of 50
+        % runs that converge to local minimum without velocity boundaries)
         vlvio = v < -vmax;
         vuvio = v > vmax;
         for i = 1:n
