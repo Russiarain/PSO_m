@@ -14,6 +14,7 @@ maxIteration = 1000;
 maxRepeat = 10;
 lb = [0 0 0];
 ub = [10 10 10];
+vmax = 0.1*(ub - lb);   % velocity limit
 fminContainer = zeros(maxRepeat,maxIteration);
 fiteContainer = zeros(maxRepeat,1);
 
@@ -45,6 +46,14 @@ for r = 1:maxRepeat
 
         % update velocity
         v = w*v + c1*rand(n,m).*(pbest-x) + c2*rand(n,m).*(gbest-x);
+
+        % handle velocity boundary violations
+        vlvio = v < -vmax;
+        vuvio = v > vmax;
+        for i = 1:n
+            v(i,vlvio(i,:)) = -vmax(vlvio(i,:));
+            v(i,vuvio(i,:)) = vmax(vuvio(i,:));
+        end
 
         % update position
         x = x + v;
