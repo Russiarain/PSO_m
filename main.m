@@ -19,6 +19,9 @@ fminContainer = zeros(maxRepeat,maxIteration);
 fiteContainer = zeros(maxRepeat,1);
 
 for r = 1:maxRepeat
+
+    tic;
+
     % PSO Initialization
     x0 = ones(n,1)*lb + rand(n,m).*(ub-lb);
     
@@ -90,14 +93,17 @@ for r = 1:maxRepeat
         end
 
         % update tolerance
-%         if ite > 600
-%             tolerance = abs(fminContainer(r,ite-1)-fmin0);  % question here
-%         end
+        if ite > 600
+            tolerance = abs(fminContainer(r,ite-1)-fmin0);  % question here
+        end
 
         ite = ite + 1;
     end
 
     fvalue = 10*(gbest(1)-1)^2+20*(gbest(2)-2)^2+(gbest(3)-3)^2;
 
+    tend = toc;
+
+    fprintf('Run %d : Quit after %d iterations, time cost %.6f s.\n', r, ite, tend)
     fprintf('min=%7.5f ;best=[%.5f %.5f %.5f]\n',fvalue, gbest(1), gbest(2), gbest(3))
 end
